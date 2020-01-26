@@ -1,3 +1,6 @@
+import axios from 'axios';
+import {API_HTTP} from '../../../configs/environment';
+
 export const ActionTypesStatuses = {
   FETCH_STATUSES_REQUEST: 'statuses/FETCH_STATUSES_REQUEST',
   FETCH_STATUSES_SUCCESS: 'statuses/FETCH_STATUSES_SUCCESS',
@@ -33,16 +36,26 @@ export default function reducer(
 }
 
 // Action Creators
-export const fetchStatusesRequest = () => ({
-  type: ActionTypesStatuses.FETCH_STATUSES_REQUEST
-});
+export const fetchStatuses = () => {
+  return dispatch => {
+    dispatch({
+      type: ActionTypesStatuses.FETCH_STATUSES_REQUEST
+    });
 
-export const fetchStatusesSuccess = (payload) => ({
-  type: ActionTypesStatuses.FETCH_STATUSES_SUCCESS,
-  payload
-});
-
-export const fetchStatusesFailure = (error) => ({
-  type: ActionTypesStatuses.FETCH_STATUSES_FAILURE,
-  error
-});
+    axios.get(`${API_HTTP}/statuses`)
+      .then(res => {
+        dispatch({
+          type: ActionTypesStatuses.FETCH_STATUSES_SUCCESS,
+          payload: res.data
+        });
+      })
+      .catch(res => {
+        dispatch({
+          type: ActionTypesStatuses.FETCH_STATUSES_FAILURE,
+          error: {
+            errorMsg: res.data.message || 'Сервер временно недоступен'
+          }
+        });
+      });
+  };
+};

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchStatusesRequest} from '../redux/modules/statuses';
+import {fetchStatuses} from '../redux/modules/statuses';
 
 class ReduxComponent extends Component {
   static defaultProps = {};
@@ -8,7 +8,7 @@ class ReduxComponent extends Component {
   state = {};
 
   componentDidMount() {
-    this.props.fetchStatusesRequest();
+    this.props.fetchStatuses();
   }
 
   render() {
@@ -26,5 +26,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  fetchStatusesRequest
+  fetchStatuses
 })(ReduxComponent);
